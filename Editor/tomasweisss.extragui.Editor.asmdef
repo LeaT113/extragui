@@ -1,0 +1,16 @@
+{
+    "name": "tomasweisss.extragui.Editor",
+    "rootNamespace": "ExtraGUIs",
+    "references": ["GUID:013950a63252c5e4c86db227362e7095"],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
