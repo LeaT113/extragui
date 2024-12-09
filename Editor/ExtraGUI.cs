@@ -7,7 +7,9 @@ namespace ExtraGUIs.Editor
 {
     public static class ExtraGUI
     {
-        private static readonly GUIContent EditFolderIcon = new GUIContent() { image = EditorGUIUtility.IconContent("d_FolderOpened Icon").image, tooltip = "Change path" };
+        private static readonly GUIContent ScriptableObjectSettingsFieldNewLabel = new ("New", "Create a a default instance.");
+        private static readonly GUIContent ScriptableObjectSettingsFieldCloneLabel = new ("Clone", "Clone the current instance.");
+        private static readonly GUIContent EditFolderIcon = new () { image = EditorGUIUtility.IconContent("d_FolderOpened Icon").image, tooltip = "Change path" };
         // TODO Create method that iterates through properties using Next() and:
         // 1. Draws fields with names from a list
         // 2. Draws fields with names excluding a list
@@ -69,17 +71,16 @@ namespace ExtraGUIs.Editor
         public static T ScriptableObjectSettingsField<T>(Rect rect, GUIContent label, T value) where T : ScriptableObject
         {
             const float buttonWidth = 50f;
-            var newLabel = new GUIContent("New", "Create a a default instance.");
-            var cloneLabel = new GUIContent("Clone", "Clone the current instance.");
+            const float objectButtonGap = 2f;
 
             var objectFieldRect = new Rect(rect.x, rect.y, rect.width - (buttonWidth * 2f + 5f), rect.height);
             var newSO = EditorGUI.ObjectField(objectFieldRect, label, value, typeof(T), false) as T;
 
-            var newButtonRect = new Rect(objectFieldRect.xMax + 5f, rect.y, buttonWidth, rect.height);
-            if (GUI.Button(newButtonRect, newLabel, EditorStyles.miniButtonLeft))
+            var newButtonRect = new Rect(objectFieldRect.xMax + objectButtonGap, rect.y, buttonWidth, rect.height);
+            if (GUI.Button(newButtonRect, ScriptableObjectSettingsFieldNewLabel, EditorStyles.miniButtonLeft))
             {
                 newSO = ScriptableObject.CreateInstance<T>();
-                var newPath = AssetDatabase.GenerateUniqueAssetPath($"Assets/{typeof(T).Name}.asset");
+                var newPath = AssetDatabase.GenerateUniqueAssetPath($"Assets/{value.GetType().Name}.asset");
 
                 AssetDatabase.CreateAsset(newSO, newPath);
                 AssetDatabase.SaveAssets();
@@ -87,19 +88,22 @@ namespace ExtraGUIs.Editor
 
             EditorGUI.BeginDisabledGroup(!value);
             var cloneButtonRect = new Rect(newButtonRect.xMax, rect.y, buttonWidth, rect.height);
-            if (GUI.Button(cloneButtonRect, cloneLabel, EditorStyles.miniButtonRight))
+            if (GUI.Button(cloneButtonRect, ScriptableObjectSettingsFieldCloneLabel, EditorStyles.miniButtonRight))
             {
                 newSO = Object.Instantiate(value);
-                var newPath = AssetDatabase.GenerateUniqueAssetPath(AssetDatabase.GetAssetPath(value));
+                var assetPath = AssetDatabase.GetAssetPath(value);
+                var newPath = !assetPath.StartsWith("Assets") ? 
+                        AssetDatabase.GenerateUniqueAssetPath($"Assets/My{System.IO.Path.GetFileName(assetPath)}") :
+                        AssetDatabase.GenerateUniqueAssetPath(AssetDatabase.GetAssetPath(value));
 
                 AssetDatabase.CreateAsset(newSO, newPath);
                 AssetDatabase.SaveAssets();
             }
-
             EditorGUI.EndDisabledGroup();
 
             return newSO;
         }
+        
         public static void ExactMinMaxSlider(Rect rect, GUIContent label, ref float minValue, ref float maxValue, float minLimit, float maxLimit, float sliderWidthRatio = 0.7f)
         {
             const float gap = 2;
