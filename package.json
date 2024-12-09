@@ -1,8 +1,8 @@
 {
 	"name": "com.tomasweisss.extragui",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"displayName": "Extra GUI",
-	"description": "A small library of Unity Editor utilities and extra PropertyDrawers to extend Unity's EditorGUI classes.",
+	"description": "A small library of Unity Editor utilities and extra PropertyDrawers, extending Unity's EditorGUI classes.",
 	"unity": "2023.2",
 	"author": {
 		"name": "Tomáš Weiss",

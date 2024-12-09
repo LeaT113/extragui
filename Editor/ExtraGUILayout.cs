@@ -56,5 +56,11 @@ namespace ExtraGUIs.Editor
             var rect = EditorGUILayout.GetControlRect();
             return ExtraGUI.ScriptableObjectSettingsField(rect, label, value);
         }
+        public static void ExactMinMaxSlider(GUIContent label, ref float minValue, ref float maxValue,
+                                             float minLimit, float maxLimit, float sliderWidthRatio = 0.7f)
+        {
+            var rect = EditorGUILayout.GetControlRect();
+            ExtraGUI.ExactMinMaxSlider(rect, label, ref minValue, ref maxValue, minLimit, maxLimit, sliderWidthRatio);
+        }
     }
 }

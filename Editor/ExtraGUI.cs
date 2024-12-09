@@ -100,6 +100,28 @@ namespace ExtraGUIs.Editor
 
             return newSO;
         }
+        public static void ExactMinMaxSlider(Rect rect, GUIContent label, ref float minValue, ref float maxValue, float minLimit, float maxLimit, float sliderWidthRatio = 0.7f)
+        {
+            const float gap = 2;
+            var floatFieldWidth = (1f - sliderWidthRatio) / 2;
+        
+            var contentRect = EditorGUI.PrefixLabel(rect, label);
+            var indent = EditorGUI.indentLevel;
+            EditorGUI.indentLevel = 0;
+            
+            var minFieldRect = new Rect(contentRect.x, contentRect.y, contentRect.width * floatFieldWidth - gap, contentRect.height);
+            var sliderRect = new Rect(minFieldRect.xMax + gap, contentRect.y, contentRect.width * sliderWidthRatio, contentRect.height);
+            var maxFieldRect = new Rect(sliderRect.xMax + gap, contentRect.y, contentRect.width * floatFieldWidth - gap, contentRect.height);
+            
+            minValue = EditorGUI.FloatField(minFieldRect, minValue);
+            EditorGUI.MinMaxSlider(sliderRect, ref minValue, ref maxValue, minLimit, maxLimit);
+            maxValue = EditorGUI.FloatField(maxFieldRect, maxValue);
+        
+            minValue = Mathf.Max(minValue, minLimit);
+            maxValue = Mathf.Min(maxValue, maxLimit);
+            
+            EditorGUI.indentLevel = indent;
+        }
 
 
         // Tools
